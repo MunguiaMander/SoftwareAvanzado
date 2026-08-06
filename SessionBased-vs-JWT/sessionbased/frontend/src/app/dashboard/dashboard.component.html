@@ -1,0 +1,63 @@
+<p-card header="Dashboard (Session-Based)">
+  <p>Usuario: <strong>{{ auth.user()?.username }}</strong> — Rol: {{ auth.user()?.role }}</p>
+  <p-button label="Cerrar sesion" (onClick)="logout()" severity="secondary" />
+</p-card>
+
+<p-card header="Contenido protegido">
+  <p-button label="Consultar" (onClick)="loadProtected()" />
+  @if (protectedMessage()) {
+    <p-message severity="success">{{ protectedMessage()! }}</p-message>
+  }
+  @if (protectedError()) {
+    <p-message severity="error">{{ protectedError()! }}</p-message>
+  }
+</p-card>
+
+<p-card header="Cambiar password">
+  <div class="field">
+    <label>Password actual</label>
+    <p-password [(ngModel)]="currentPassword" [feedback]="false" [toggleMask]="true" />
+  </div>
+  <div class="field">
+    <label>Password nuevo</label>
+    <p-password [(ngModel)]="newPassword" [feedback]="false" [toggleMask]="true" />
+  </div>
+  <p-button label="Actualizar" (onClick)="changePassword()" />
+  @if (passwordMessage()) {
+    <p-message severity="info">{{ passwordMessage()! }}</p-message>
+  }
+</p-card>
+
+@if (auth.user()?.role === 'ADMIN') {
+  <p-card header="Administracion">
+    <p-button label="Refrescar usuarios" (onClick)="loadUsers()" />
+    <p-table [value]="users()">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Usuario</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Sesiones activas</th>
+          <th>Accion</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-u>
+        <tr>
+          <td>{{ u.username }}</td>
+          <td>{{ u.role }}</td>
+          <td>
+            <p-tag [value]="u.enabled ? 'Activo' : 'Bloqueado'" [severity]="u.enabled ? 'success' : 'danger'" />
+          </td>
+          <td>{{ u.activeSessions }}</td>
+          <td>
+            @if (u.enabled) {
+              <p-button label="Bloquear" severity="danger" (onClick)="block(u.username)" />
+            } @else {
+              <p-button label="Desbloquear" (onClick)="unblock(u.username)" />
+            }
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+}

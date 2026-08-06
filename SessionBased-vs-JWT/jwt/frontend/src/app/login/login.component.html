@@ -1,0 +1,18 @@
+<p-card header="Login (JWT)">
+  <div class="field">
+    <label for="username">Usuario</label>
+    <input pInputText id="username" [(ngModel)]="username" />
+  </div>
+  <div class="field">
+    <label for="password">Password</label>
+    <p-password id="password" [(ngModel)]="password" [feedback]="false" [toggleMask]="true" />
+  </div>
+
+  @if (error()) {
+    <p-message severity="error">{{ error()! }}</p-message>
+  }
+
+  <p-button label="Entrar" (onClick)="submit()" [loading]="loading()" />
+  <p-button label="Ver pagina publica" [routerLink]="['/public']" severity="secondary" [text]="true" />
+
+</p-card>
