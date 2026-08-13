@@ -1,0 +1,12 @@
+.env
+
+# Builds
+target/
+dist/
+node_modules/
+.angular/
+
+# IDE
+.idea/
+*.iml
+.vscode/

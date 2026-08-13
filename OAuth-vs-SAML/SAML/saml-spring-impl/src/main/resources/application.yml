@@ -1,0 +1,41 @@
+server:
+  servlet:
+    session:
+      cookie:
+        name: SPSESSIONID
+  port: 8083
+
+spring:
+  application:
+    name: saml-sp
+
+  security:
+    saml2:
+      relyingparty:
+        registration:
+          samltest:
+            signing:
+              credentials:
+                - private-key-location: classpath:saml/sp-private.key
+                  certificate-location: classpath:saml/sp-certificate.crt
+            decryption:
+              credentials:
+                - private-key-location: classpath:saml/sp-private.key
+                  certificate-location: classpath:saml/sp-certificate.crt
+
+            entity-id: http://localhost:8083/saml2/service-provider-metadata/samltest
+
+            assertionconsumerservice:
+              location: "{baseUrl}/login/saml2/sso/{registrationId}"
+
+            singlelogout:
+              location: "{baseUrl}/logout/saml2/slo"
+              response-location: "{baseUrl}/logout/saml2/slo"
+              binding: POST
+
+            assertingparty:
+              metadata-uri: http://localhost:8080/realms/poc-saml/protocol/saml/descriptor
+
+logging:
+  level:
+    org.springframework.security: DEBUG

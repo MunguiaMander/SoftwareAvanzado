@@ -1,0 +1,10 @@
+server:
+  servlet:
+    session:
+      cookie:
+        name: ASSESSIONID
+  port: 9001
+
+spring:
+  application:
+    name: authorization-server

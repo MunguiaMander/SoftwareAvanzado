@@ -1,0 +1,82 @@
+<div class="page">
+  <header class="bar">
+    <div>
+      <span class="badge saml">SAML 2.0</span>
+      <strong>Dashboard</strong>
+    </div>
+    <button class="btn ghost" (click)="logout()">Cerrar sesión (SLO)</button>
+  </header>
+
+  <section class="card">
+    <h2>Identidad</h2>
+    @if (user()) {
+      <div class="identity">
+        <div>
+          <div class="name">{{ user()!.nameId }}</div>
+          <div class="sub">NameID del &lt;Subject&gt;</div>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="card highlight">
+    <h2>Atributos del directorio</h2>
+    @if (attributeRows().length) {
+      <table class="attrs">
+        <thead>
+          <tr><th>Atributo</th><th>Valor</th></tr>
+        </thead>
+        <tbody>
+          @for (row of attributeRows(); track row.name) {
+            <tr>
+              <td><code>{{ row.name }}</code></td>
+              <td>{{ row.value }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <p class="hint">
+        {{ attributeRows().length }} atributos recibidos en el login, sin llamadas extra.
+      </p>
+    }
+  </section>
+
+  <section class="card">
+    <h2>Assertion XML</h2>
+
+    @if (assertion(); as a) {
+      @if (a.available) {
+        <div class="metrics">
+          <div class="metric">
+            <span class="value">{{ a.sizeBytes }}</span>
+            <span class="label">bytes ({{ sizeKb() }} KB)</span>
+          </div>
+          <div class="metric">
+            <span class="value">{{ a.hasSignature ? 'Sí' : 'No' }}</span>
+            <span class="label">firmada</span>
+          </div>
+          <div class="metric">
+            <span class="value">{{ a.hasAudienceRestriction ? 'Sí' : 'No' }}</span>
+            <span class="label">AudienceRestriction</span>
+          </div>
+        </div>
+
+        <div class="checks">
+          <span class="check" [class.on]="a.hasConditions">&lt;Conditions&gt;</span>
+          <span class="check" [class.on]="a.hasAttributeStatement">&lt;AttributeStatement&gt;</span>
+          <span class="check" [class.on]="a.hasSignature">&lt;ds:Signature&gt;</span>
+        </div>
+
+        <button class="btn small" (click)="showXml.set(!showXml())">
+          {{ showXml() ? 'Ocultar' : 'Ver' }} XML completo
+        </button>
+
+        @if (showXml()) {
+          <pre class="xml">{{ formatXml(a.xml!) }}</pre>
+        }
+      } @else {
+        <div class="result fail">{{ a.message }}</div>
+      }
+    }
+  </section>
+</div>

@@ -1,0 +1,27 @@
+<div class="page">
+  <header class="bar">
+    <div>
+      <span class="badge oauth">OAuth 2.0 + OIDC</span>
+      <strong>POC</strong>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2>Página pública</h2>
+    <div class="result ok">{{ message() }}</div>
+  </section>
+
+  <section class="card">
+    <h2>Ruta protegida</h2>
+    <button class="btn ghost" (click)="tryProtected()">Probar /api/me sin sesión</button>
+    @if (protectedResult()) {
+      <div class="result fail">{{ protectedResult() }}</div>
+    }
+  </section>
+
+  <section class="card highlight">
+    <h2>Iniciar sesión</h2>
+    <p class="hint">Usuarios: <code>ana / ana123</code> · <code>luis / luis123</code></p>
+    <button class="btn" (click)="login()">Iniciar sesión con OAuth 2.0</button>
+  </section>
+</div>

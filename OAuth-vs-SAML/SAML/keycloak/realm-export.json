@@ -1,0 +1,153 @@
+{
+  "realm": "poc-saml",
+  "enabled": true,
+  "displayName": "POC SAML - Software Avanzado",
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "clients": [
+    {
+      "clientId": "http://localhost:8083/saml2/service-provider-metadata/samltest",
+      "name": "POC Spring SP",
+      "protocol": "saml",
+      "enabled": true,
+      "fullScopeAllowed": true,
+      "redirectUris": [
+        "http://localhost:8083/*"
+      ],
+      "baseUrl": "http://localhost:8083",
+      "attributes": {
+        "saml.client.signature": "true",
+        "saml.signing.certificate": "MIIC+jCCAeICCQChLoOhznK8eDANBgkqhkiG9w0BAQsFADA/MRQwEgYDVQQDDAtwb2Mtc2FtbC1zcDEaMBgGA1UECgwRU29mdHdhcmUgQXZhbnphZG8xCzAJBgNVBAYTAk1YMB4XDTI2MDgxMjIyMTgzMVoXDTM2MDgwOTIyMTgzMVowPzEUMBIGA1UEAwwLcG9jLXNhbWwtc3AxGjAYBgNVBAoMEVNvZnR3YXJlIEF2YW56YWRvMQswCQYDVQQGEwJNWDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMj9asOHsqYR4/RbE1YfO7osYs7JFE1+csS1SwwNY4+N2Wpkv8Qw3bc0ubD3PS+5hLZYGKwj+g2kYoiyiteIRFUF6FwMtDIBQQRA+C+wHYRYceRdYvXpcZQ62MIeaWVc7zx2CO/7Ufq305+/5UjvZNMWkpaY1QrBid54F/MHLpsMSFQNyC/CExwnXnl1l4ST9qO98MGM6Hqdao0t7Sa+rO+MOKRnTWjw1t70cbJEo6DA7MPhBAw2Znlv6s0IIjGPD3PJC6WzK8sVtAXau74xwfJeUkzai8Loomg1DZTUIkaNitAo6Nx9TWInYeNweutXKw8x8Cr7iJ8dr+b5pEeR9IkCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAKPyKNlU7mOH04j0xn687rxyZAv9oNIzvQJkNZCuSJJissa5VkrBdp2oQNP5P5f5Sz5zUwbXfGmwHBvUF3AkRjU+VOFTT9O7+qlO2Dg0pg8c33O5E6ZetAKfDuzaauQHqoR43F1QfyVX/DmRHiuDfqk766FQno+TYG7LMN6lcLqlIyE7Za0SsMVDgeNsssQrWCaeqsoAkmhSiThOf+24hpMGQRsckTlG68WYsPDw6Alu/fdH5DHrHR4ncrtRf0Ipf1q28CvOy2QdHPI8nnMzCaDgi2YcTBRq5S5eOhvTkidp6gnyWVNgNz3c1tqwyFbfaGBHx2VKJ91SZzLkzDm/+5Q==",
+        "saml.assertion.signature": "true",
+        "saml.server.signature": "true",
+        "saml.signature.algorithm": "RSA_SHA256",
+        "saml_name_id_format": "email",
+        "saml.authnstatement": "true",
+        "saml_assertion_consumer_url_post": "http://localhost:8083/login/saml2/sso/samltest",
+        "saml_single_logout_service_url_post": "http://localhost:8083/logout/saml2/slo",
+        "saml.encrypt": "false",
+        "saml.force.post.binding": "true"
+      },
+      "protocolMappers": [
+        {
+          "name": "mail",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "email",
+            "friendly.name": "E-Mail",
+            "attribute.name": "mail",
+            "attribute.nameformat": "Basic"
+          }
+        },
+        {
+          "name": "givenName",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "firstName",
+            "friendly.name": "Given Name",
+            "attribute.name": "givenName",
+            "attribute.nameformat": "Basic"
+          }
+        },
+        {
+          "name": "surname",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "lastName",
+            "friendly.name": "Surname",
+            "attribute.name": "surname",
+            "attribute.nameformat": "Basic"
+          }
+        },
+        {
+          "name": "roles",
+          "protocol": "saml",
+          "protocolMapper": "saml-role-list-mapper",
+          "consentRequired": false,
+          "config": {
+            "attribute.name": "Role",
+            "attribute.nameformat": "Basic",
+            "single": "false"
+          }
+        },
+        {
+          "name": "department",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "department",
+            "friendly.name": "Department",
+            "attribute.name": "department",
+            "attribute.nameformat": "Basic"
+          }
+        }
+      ]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "empleado"
+      },
+      {
+        "name": "gerente"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "ana",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "ana@empresa-demo.com",
+      "firstName": "Ana",
+      "lastName": "Ramirez",
+      "attributes": {
+        "department": [
+          "Ingenieria"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "ana123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "empleado",
+        "gerente"
+      ]
+    },
+    {
+      "username": "luis",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "luis@empresa-demo.com",
+      "firstName": "Luis",
+      "lastName": "Torres",
+      "attributes": {
+        "department": [
+          "Ventas"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "luis123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "empleado"
+      ]
+    }
+  ]
+}

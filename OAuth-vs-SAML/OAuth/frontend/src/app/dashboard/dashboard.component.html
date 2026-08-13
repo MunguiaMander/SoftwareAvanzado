@@ -1,0 +1,106 @@
+<div class="page">
+  <header class="bar">
+    <div>
+      <span class="badge oauth">OAuth 2.0 + OIDC</span>
+      <strong>Dashboard</strong>
+    </div>
+    <button class="btn ghost" (click)="logout()">Cerrar sesión</button>
+  </header>
+
+  <section class="card">
+    <h2>Identidad</h2>
+    @if (user()) {
+      <div class="identity">
+        <div>
+          <div class="name">{{ user()!.name }}</div>
+          <div class="mail">{{ user()!.email }}</div>
+          <div class="sub">sub: <code>{{ user()!.sub }}</code></div>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="card">
+    <h2>Tokens</h2>
+
+    @if (tokens(); as t) {
+      <div class="metrics">
+        <div class="metric">
+          <span class="value">{{ t.idTokenSizeBytes }}</span>
+          <span class="label">bytes del id_token</span>
+        </div>
+        <div class="metric">
+          <span class="value">{{ t.grantedScopes.length }}</span>
+          <span class="label">scopes concedidos</span>
+        </div>
+        <div class="metric">
+          <span class="value">{{ t.hasRefreshToken ? 'Sí' : 'No' }}</span>
+          <span class="label">refresh token</span>
+        </div>
+      </div>
+
+      <div class="scopes">
+        <strong>Scopes:</strong>
+        @for (s of t.grantedScopes; track s) {
+          <span class="chip">{{ s }}</span>
+        }
+      </div>
+      <p class="expiry">Expira: <code>{{ t.expiresAt }}</code></p>
+
+      <div class="toggle">
+        <button class="btn small" (click)="showRaw.set(false)" [class.active]="!showRaw()">
+          Decodificado
+        </button>
+        <button class="btn small" (click)="showRaw.set(true)" [class.active]="showRaw()">
+          Crudo
+        </button>
+      </div>
+
+      @if (showRaw()) {
+        <h4>id_token</h4>
+        <pre class="raw">{{ t.idTokenRaw }}</pre>
+      } @else {
+        <h4>Header</h4>
+        <pre>{{ pretty(t.idTokenHeader) }}</pre>
+        <h4>Payload del id_token</h4>
+        <pre>{{ pretty(t.idTokenPayload) }}</pre>
+        <h4>Payload del access_token</h4>
+        <pre>{{ pretty(t.accessTokenPayload) }}</pre>
+      }
+    }
+  </section>
+
+  <section class="card highlight">
+    <h2>Scopes</h2>
+
+    <div class="actions">
+      <button class="btn" (click)="readNotes()">
+        Leer notas <span class="req">notes.read</span>
+      </button>
+      <div class="write-row">
+        <input
+          class="input"
+          [ngModel]="newNoteText()"
+          (ngModelChange)="newNoteText.set($event)"
+          placeholder="Texto de la nota…" />
+        <button class="btn" (click)="writeNote()">
+          Crear nota <span class="req">notes.write</span>
+        </button>
+      </div>
+    </div>
+
+    @if (lastResult(); as r) {
+      <div class="result" [class.ok]="r.ok" [class.fail]="!r.ok">
+        <strong>{{ r.status }}</strong> {{ r.message }}
+      </div>
+    }
+
+    @if (notes().length) {
+      <ul class="notes">
+        @for (n of notes(); track n.id) {
+          <li><span class="id">#{{ n.id }}</span> {{ n.text }}</li>
+        }
+      </ul>
+    }
+  </section>
+</div>
