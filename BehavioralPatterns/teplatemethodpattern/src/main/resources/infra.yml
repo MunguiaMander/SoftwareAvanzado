@@ -1,0 +1,12 @@
+services:
+  api-gateway:
+    image: nginx:latest
+    port: 0.0.0.0:443
+
+  pedidos-svc:
+    image: pedidos:1.0
+    port: 0.0.0.0:8080
+
+  pagos-svc:
+    image: pagos:1.0
+    port: 127.0.0.1:8081
